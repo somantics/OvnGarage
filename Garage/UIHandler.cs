@@ -26,7 +26,7 @@ public class UIHandler
     {
         var menu = new OptionsMenu("Welcome to the main menu.", "Your option: ");
 
-        var addVehicleSubmenu = new PromptMultipleMenu("Adding a vehicle.", "Enter registration number, type, amount of wheels: ", AddVehicle);
+        var addVehicleSubmenu = new PromptMenu("Adding a vehicle.", "Enter registration number, type, amount of wheels: ", AddVehicle);
         menu.AddCommand("add", "Add a vehicle.", MenuOption.CreateOpenSubmenu(addVehicleSubmenu));
 
         var removeVehicleSubmenu = new PromptMenu("Removing a vehicle.", "Enter registration number: ", RemoveVehicle);
@@ -61,12 +61,14 @@ public class UIHandler
         return true;
     }
 
-    private bool AddVehicle(string[] input, out string result)
+    private bool AddVehicle(string rawInput, out string result)
     {
+        string[] input = rawInput.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
         // is the input actually a vehicle
         if (!Vehicle.TryParse(input, out Vehicle vehicle))
         {
-            result = "Cannot interprept a vehicle from the input.";
+            result = "Cannot interpret a vehicle from the input.";
             return false;
         }
 
