@@ -1,20 +1,11 @@
 ﻿
 
 using Garage;
+using Garage.UI;
 
-var garage = new Garage.Garage(5);
-garage.Add(new Motorcycle(new RegistrationNumber("a"), 2));
-garage.Add(new Airplane(new RegistrationNumber("b"), 5));
-
-foreach (var item in garage.GetVehicleList())
-{
-    Console.WriteLine(item.RegistrationNumber);
-}
-
-foreach ((string key, int value) in garage.GetTypeCounts())
-{
-    Console.WriteLine($"{key}: {value}");
-}
+Garage.Garage garage = new Garage.Garage(5);
+var ui = new UIHandler(garage);
+ui.Run();
 
 
 /*

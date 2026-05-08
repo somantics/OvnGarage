@@ -7,32 +7,39 @@ public class Garage(int capacity)
 
     public void Add(Vehicle vehicle)
     {
+        TryAdd(vehicle);
+    }
+
+    public bool TryAdd(Vehicle vehicle)
+    {
         Console.WriteLine(vehicle.GetType());
         for (int i = 0; i < _vehicles.Length ; i++)
         {
             if (_vehicles[i] is null)
             {
                 _vehicles[i] = vehicle;
-                break;
+                return true;
             }
         }
+        return false;
     }
 
-    public void Remove(Vehicle vehicle)
+    public bool TryRemove(Vehicle vehicle)
     {
-        Remove(vehicle.RegistrationNumber);
+        return TryRemove(vehicle.RegistrationNumber);
     }
 
-    public void Remove(RegistrationNumber registrationNumber)
+    public bool TryRemove(RegistrationNumber registrationNumber)
     {
         for (int i = 0; i < _vehicles.Length ; i++)
         {
             if (_vehicles[i]?.RegistrationNumber == registrationNumber)
             {
                 _vehicles[i] = null;
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     public Vehicle? GetVehicle(RegistrationNumber registrationNumber)
@@ -47,19 +54,19 @@ public class Garage(int capacity)
         return null;
     }
 
-    public List<Vehicle> GetVehicleList()
+    public Vehicle[] GetVehicles()
     {
         return _vehicles
             .Where(e => e is not null)
             .Select(e => e!)
-            .ToList();
+            .ToArray();
     }
 
     public Dictionary<string, int> GetTypeCounts()
     {
         Dictionary<string, int> vehicleCounts = [];
 
-        foreach (var vehicle in GetVehicleList())
+        foreach (var vehicle in GetVehicles())
         {
             string vehicleType = vehicle.GetType().ToString();
 
