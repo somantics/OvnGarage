@@ -1,9 +1,10 @@
-﻿using ConsoleMenu;
-using ConsoleMenu.CLI;
+﻿
 
-var startMenu = new OptionsMenu("Main menu.", "Option: ");
-var client = new CLIClient(startMenu);
-client.Run();
+using Garage;
+
+var garage = new Garage.Garage(5);
+garage.Add(new Motorcycle(new RegistrationNumber("a"), 2));
+garage.Add(new Airplane(new RegistrationNumber("b"), 5));
 
 
 /*
