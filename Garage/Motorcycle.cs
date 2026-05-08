@@ -1,3 +1,3 @@
 namespace Garage;
 
-public record Motorcycle(RegistrationNumber RegistrationNumber, int NumberOfWheels) : Vehicle(RegistrationNumber, NumberOfWheels);
+public record Motorcycle(RegistrationNumber RegistrationNumber, VehicleColor Color, int NumberOfWheels) : Vehicle(RegistrationNumber, Color, NumberOfWheels);
