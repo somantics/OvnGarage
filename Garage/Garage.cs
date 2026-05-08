@@ -47,5 +47,30 @@ public class Garage(int capacity)
         return null;
     }
 
-    
+    public List<Vehicle> GetVehicleList()
+    {
+        return _vehicles
+            .Where(e => e is not null)
+            .Select(e => e!)
+            .ToList();
+    }
+
+    public Dictionary<string, int> GetTypeCounts()
+    {
+        Dictionary<string, int> vehicleCounts = [];
+
+        foreach (var vehicle in GetVehicleList())
+        {
+            string vehicleType = vehicle.GetType().ToString();
+
+            if (!vehicleCounts.ContainsKey(vehicleType))
+            {
+                vehicleCounts.Add(vehicleType, 0);
+            }
+
+            vehicleCounts[vehicleType] ++;
+        }
+
+        return vehicleCounts;
+    }
 }
