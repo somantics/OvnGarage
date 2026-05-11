@@ -1,7 +1,7 @@
 
 using System.ComponentModel.Design;
 using System.Text;
-using ConsoleMenu;
+using ConsoleMenu.Menu;
 using ConsoleMenu.CLI;
 
 namespace Garage.UI;
@@ -26,18 +26,18 @@ public class UIHandler
     {
         var menu = new OptionsMenu("Welcome to the main menu.", "Your option: ");
 
-        var addVehicleSubmenu = new PromptMenu("Adding a vehicle.", "Enter registration number, type, amount of wheels: ", AddVehicle);
-        menu.AddCommand("add", "Add a vehicle.", MenuOption.CreateOpenSubmenu(addVehicleSubmenu));
+        var addVehicleSubmenu = new PromptMenu("Adding a vehicle.", "Enter registration number, color, and type: ", AddVehicle);
+        menu.AddOption("add", "Add a vehicle.", Menu.CreateOpenSubmenu(addVehicleSubmenu));
 
         var removeVehicleSubmenu = new PromptMenu("Removing a vehicle.", "Enter registration number: ", RemoveVehicle);
-        menu.AddCommand("rm", "Remove a vehicle.", MenuOption.CreateOpenSubmenu(removeVehicleSubmenu));
+        menu.AddOption("rm", "Remove a vehicle.", Menu.CreateOpenSubmenu(removeVehicleSubmenu));
 
         var getVehicleSubmenu = new PromptMenu("Requesting information on a vehicle.", "Enter registration number: ", GetVehicle);
-        menu.AddCommand("get", "Remove a vehicle.", MenuOption.CreateOpenSubmenu(getVehicleSubmenu));
+        menu.AddOption("get", "Remove a vehicle.", Menu.CreateOpenSubmenu(getVehicleSubmenu));
 
-        menu.AddCommand("list", "List parked vehicles.", MenuOption.CreateOutputCommand(GetVehicleArray));
-        menu.AddCommand("count", "List each parked vehicle type and respective counts.", MenuOption.CreateOutputCommand(GetVehicleTypes));
-        menu.AddCommand("q", "Quit the applicaiton.", MenuOption.Close);
+        menu.AddOption("list", "List parked vehicles.", Menu.CreateOutputCommand(GetVehicleArray));
+        menu.AddOption("count", "List each parked vehicle type and respective counts.", Menu.CreateOutputCommand(GetVehicleTypes));
+        menu.AddOption("q", "Quit the applicaiton.", Menu.Close);
 
         return menu;
     }

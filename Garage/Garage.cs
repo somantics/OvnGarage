@@ -80,4 +80,6 @@ public class Garage(int capacity)
 
         return vehicleCounts;
     }
+
+    
 }
