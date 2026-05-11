@@ -1,5 +1,5 @@
 
-using System.ComponentModel.Design;
+
 using System.Text;
 using ConsoleMenu.Menu;
 using ConsoleMenu.CLI;
@@ -26,6 +26,14 @@ public class UIHandler
     {
         var menu = new OptionsMenu("Welcome to the main menu.", "Your option: ");
 
+
+        var newGarageSubmenu = new PromptMultipleMenu(
+            "Adding a vehicle.", 
+            "How many vehicles do you want to enter? ", 
+            "Enter registration number, color, and type separated by a blank space.", 
+            NewGarage);
+        menu.AddOption("new", "Make a new garage (replaces the old one)", Menu.CreateOpenSubmenu(newGarageSubmenu));
+
         var addVehicleSubmenu = new PromptMenu("Adding a vehicle.", "Enter registration number, color, and type: ", AddVehicle);
         menu.AddOption("add", "Add a vehicle.", Menu.CreateOpenSubmenu(addVehicleSubmenu));
 
@@ -43,6 +51,24 @@ public class UIHandler
         menu.AddOption("q", "Quit the applicaiton.", Menu.Close);
 
         return menu;
+    }
+
+    private bool NewGarage(string[] input, out string result)
+    {
+        var builder = new StringBuilder();
+        _garage = new Garage(input.Length);
+
+        foreach (var entry in input)
+        {
+            if (!AddVehicle(entry, out result))
+            {
+                builder.AppendLine(result);
+            }
+        }
+
+        builder.AppendLine($"Created a new garage of size: {input.Length}");
+        result = builder.ToString();
+        return true;
     }
 
     private bool RemoveVehicle(string input, out string result)
