@@ -81,5 +81,70 @@ public class Garage(int capacity)
         return vehicleCounts;
     }
 
+    public Vehicle?[] SearchVehicles(string[] input)
+    {
+        VehicleColor? searchColor = null;
+        Type? searchVehicleType = null;
+        int? searchWheelAmount = null;
+        Vehicle?[] matchingVehicles = new Vehicle[capacity];
+
+        // interpret search terms
+        foreach (string str in input)
+        {
+            if (searchColor is null && Vehicle.TryParseColor(str, out VehicleColor color))
+            {
+                searchColor = color;
+                continue;
+            }
+
+            if (searchVehicleType is null && Vehicle.TryParseType(str, out Type type))
+            {
+                searchVehicleType = type;
+                continue;
+            }
+
+            if (searchWheelAmount is null && int.TryParse(str, out int wheels))
+            {
+                searchWheelAmount = wheels;
+                continue;
+            }
+        }
+
+        // perform search
+        int foundCounter = 0;
+        foreach (var vehicle in _vehicles)
+        {
+            if (vehicle is null)
+            {
+                // spot is empty
+                continue;
+            }
+
+            if (searchVehicleType != null && vehicle.GetType() != searchVehicleType)
+            {
+                // wrong type, not wanted
+                continue;
+            }
+
+            if (searchColor != null && vehicle.Color != searchColor)
+            {
+                // wrong color, not wanted
+                continue;
+            }
+
+            if (searchWheelAmount != null && vehicle.NumberOfWheels != searchWheelAmount)
+            {
+                // wrong number of wheels, not wanted
+                continue;
+            }
+
+            // Anything here is wanted
+            matchingVehicles[foundCounter] = vehicle;
+            foundCounter++;
+        }
+
+        return matchingVehicles;
+    }
+
     
 }

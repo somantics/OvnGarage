@@ -35,6 +35,9 @@ public class UIHandler
         var getVehicleSubmenu = new PromptMenu("Requesting information on a vehicle.", "Enter registration number: ", GetVehicle);
         menu.AddOption("get", "Remove a vehicle.", Menu.CreateOpenSubmenu(getVehicleSubmenu));
 
+        var searchVehicleSubmenu = new PromptArrayMenu("Searching for vehicles matching attributes.", "Enter search terms separated by spaces: ", SearchVehicles);
+        menu.AddOption("search", "Search for vehicle.", Menu.CreateOpenSubmenu(searchVehicleSubmenu));
+
         menu.AddOption("list", "List parked vehicles.", Menu.CreateOutputCommand(GetVehicleArray));
         menu.AddOption("count", "List each parked vehicle type and respective counts.", Menu.CreateOutputCommand(GetVehicleTypes));
         menu.AddOption("q", "Quit the applicaiton.", Menu.Close);
@@ -126,6 +129,24 @@ public class UIHandler
         foreach (var type in types)
         {
             builder.AppendLine(type.ToString());
+        }
+
+        result = builder.ToString();
+        return true;
+    }
+
+    private bool SearchVehicles(string[] input, out string result)
+    {
+        Vehicle?[] vehicles = _garage.SearchVehicles(input);
+
+        var builder = new StringBuilder();
+        foreach (var vehicle in vehicles)
+        {
+            if (vehicle is null)
+            {
+                continue;
+            }
+            builder.AppendLine(vehicle.ToString());
         }
 
         result = builder.ToString();
