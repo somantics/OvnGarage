@@ -6,7 +6,10 @@ public record Motorcycle(RegistrationNumber RegistrationNumber, VehicleColor Col
     public Motorcycle(RegistrationNumber RegistrationNumber, VehicleColor Color)
         : this(RegistrationNumber, Color, _default_nr_wheels)
     {
-        
     }
-    
+
+    public override string MakeNoise()
+    {
+        return "Zoomzoom";
+    }
 }

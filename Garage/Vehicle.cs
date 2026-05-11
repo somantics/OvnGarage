@@ -4,6 +4,16 @@ public enum VehicleColor
     red,
     blue,
     black,
+    yellow,
+    grey,
+    pink,
+    green,
+    magenta,
+    purple,
+    orange,
+    white,
+    brown,
+
     none,
 }
 
@@ -48,6 +58,15 @@ public abstract record Vehicle(RegistrationNumber RegistrationNumber, VehicleCol
             "red" => VehicleColor.red,
             "blue" => VehicleColor.blue,
             "black" => VehicleColor.black,
+            "yellow" => VehicleColor.yellow,
+            "grey" => VehicleColor.grey,
+            "green" => VehicleColor.green,
+            "pink" => VehicleColor.pink,
+            "magenta" => VehicleColor.magenta,
+            "purple" => VehicleColor.purple,
+            "orange" => VehicleColor.orange,
+            "white" => VehicleColor.white,
+            "brown" => VehicleColor.brown,
             _ => VehicleColor.none,
         };
 
@@ -74,8 +93,8 @@ public abstract record Vehicle(RegistrationNumber RegistrationNumber, VehicleCol
         return true;
     }
 
-    public static string VroomVroom()
+    public virtual string MakeNoise()
     {
-        return "Vroom vroom.";
+        return "If a vehicle makes a sound in a forest...";
     }
 }

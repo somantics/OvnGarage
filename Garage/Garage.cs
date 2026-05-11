@@ -42,6 +42,24 @@ public class Garage(int capacity)
         return false;
     }
 
+    public bool TryHonk(RegistrationNumber registrationNumber, out string result)
+    {
+        for (int i = 0; i < _vehicles.Length ; i++)
+        {
+            if (_vehicles[i] is null)
+            {
+                continue;
+            }
+            else if (_vehicles[i].RegistrationNumber == registrationNumber)
+            {
+                result = _vehicles[i].MakeNoise();
+                return true;
+            }
+        }
+        result = "Can't find a vehicle with matching registration number.";
+        return false;
+    }
+
     public Vehicle? GetVehicle(RegistrationNumber registrationNumber)
     {
         foreach (var vehicle in _vehicles)

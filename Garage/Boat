@@ -8,5 +8,8 @@ public record Boat(RegistrationNumber RegistrationNumber, VehicleColor Color, in
     {
         
     }
-    
+    public override string MakeNoise()
+    {
+        return "Glug glug";
+    }
 }

@@ -8,5 +8,8 @@ public record Car(RegistrationNumber RegistrationNumber, VehicleColor Color, int
     {
         
     }
-    
+    public override string MakeNoise()
+    {
+        return "Vroomvroom";
+    }
 }

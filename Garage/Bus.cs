@@ -9,4 +9,8 @@ public record Bus(RegistrationNumber RegistrationNumber, VehicleColor Color, int
         
     }
     
+    public override string MakeNoise()
+    {
+        return "Hooonk Hooonk";
+    }
 }

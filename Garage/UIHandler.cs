@@ -46,6 +46,9 @@ public class UIHandler
         var searchVehicleSubmenu = new PromptArrayMenu("Searching for vehicles matching attributes.", "Enter search terms separated by spaces: ", SearchVehicles);
         menu.AddOption("search", "Search for vehicle.", Menu.CreateOpenSubmenu(searchVehicleSubmenu));
 
+        var honkVehicleSubmenu = new PromptMenu("Honking a vehicle.", "Enter registration number: ", Honk);
+        menu.AddOption("honk", "Honk a vehicle.", Menu.CreateOpenSubmenu(honkVehicleSubmenu));
+
         menu.AddOption("list", "List parked vehicles.", Menu.CreateOutputCommand(GetVehicleArray));
         menu.AddOption("count", "List each parked vehicle type and respective counts.", Menu.CreateOutputCommand(GetVehicleTypes));
         menu.AddOption("q", "Quit the applicaiton.", Menu.Close);
@@ -68,6 +71,25 @@ public class UIHandler
 
         builder.AppendLine($"Created a new garage of size: {input.Length}");
         result = builder.ToString();
+        return true;
+    }
+
+    private bool Honk(string input, out string result)
+    {
+        // is input a registration number?
+        if (!RegistrationNumber.TryParse(input, out RegistrationNumber number))
+        {
+            result = "Could not recognize registration number.";
+            return false;
+        }
+
+        if (!_garage.TryHonk(number, out string noise))
+        {
+            result = "No vehicle found with registration number {number}.";
+            return false;
+        }
+        
+        result = noise;
         return true;
     }
 

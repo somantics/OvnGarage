@@ -8,4 +8,9 @@ public record Airplane(RegistrationNumber RegistrationNumber, VehicleColor Color
     {
         
     }
+
+    public override string MakeNoise()
+    {
+        return "Fwoooosh";
+    }
 }
