@@ -83,6 +83,9 @@ public abstract record Vehicle(RegistrationNumber RegistrationNumber, VehicleCol
         {
             "motorcycle" => typeof(Motorcycle),
             "airplane" => typeof(Airplane),
+            "bus" => typeof(Bus),
+            "car" => typeof(Car),
+            "boat" => typeof(Boat),
             _ => typeof(NullVehicle),
         };
 

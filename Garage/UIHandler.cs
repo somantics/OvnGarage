@@ -63,7 +63,8 @@ public class UIHandler
 
         foreach (var entry in input)
         {
-            if (!AddVehicle(entry, out result))
+            bool success = AddVehicle(entry, out result);
+            if (!success)
             {
                 builder.AppendLine(result);
             }
@@ -83,7 +84,8 @@ public class UIHandler
             return false;
         }
 
-        if (!_garage.TryHonk(number, out string noise))
+        bool success = _garage.TryHonk(number, out string noise);
+        if (!success)
         {
             result = "No vehicle found with registration number {number}.";
             return false;
@@ -102,7 +104,8 @@ public class UIHandler
             return false;
         }
 
-        if (!_garage.TryRemove(number))
+        bool success = _garage.TryRemove(number);
+        if (!success)
         {
             result = "No vehicle found with registration number {number}.";
             return false;
@@ -124,7 +127,8 @@ public class UIHandler
         }
 
         // is there room for the vehicle
-        if (!_garage.TryAdd(vehicle))
+        bool success = _garage.TryAdd(vehicle);
+        if (!success)
         {
             result = "No room in the garage.";
             return false;
