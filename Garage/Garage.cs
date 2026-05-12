@@ -12,7 +12,6 @@ public class Garage(int capacity)
 
     public bool TryAdd(Vehicle vehicle)
     {
-        Console.WriteLine(vehicle.GetType());
         for (int i = 0; i < _vehicles.Length ; i++)
         {
             if (_vehicles[i] is null)
