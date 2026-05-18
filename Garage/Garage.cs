@@ -1,9 +1,12 @@
 
+using System.Collections;
+
 namespace Garage;
 
-public class Garage(int capacity)
+public class Garage(int capacity) : IEnumerable<Vehicle>
 {
-    readonly Vehicle?[] _vehicles = new Vehicle?[capacity];
+    private readonly int capacity = capacity;
+    readonly List<Vehicle> _vehicles = [];
 
     public void Add(Vehicle vehicle)
     {
@@ -12,15 +15,12 @@ public class Garage(int capacity)
 
     public bool TryAdd(Vehicle vehicle)
     {
-        for (int i = 0; i < _vehicles.Length ; i++)
+        if (capacity <= _vehicles.Count)
         {
-            if (_vehicles[i] is null)
-            {
-                _vehicles[i] = vehicle;
-                return true;
-            }
+            return false;
         }
-        return false;
+        _vehicles.Add(vehicle);
+        return true;
     }
 
     public bool TryRemove(Vehicle vehicle)
@@ -30,53 +30,39 @@ public class Garage(int capacity)
 
     public bool TryRemove(RegistrationNumber registrationNumber)
     {
-        for (int i = 0; i < _vehicles.Length ; i++)
+        Vehicle? match = _vehicles.Find(v => v.RegistrationNumber == registrationNumber);
+        if (match is null)
         {
-            if (_vehicles[i]?.RegistrationNumber == registrationNumber)
-            {
-                _vehicles[i] = null;
-                return true;
-            }
+            return false;
         }
-        return false;
+
+        _vehicles.Remove(match);
+        return true;
     }
 
     public bool TryHonk(RegistrationNumber registrationNumber, out string result)
     {
-        for (int i = 0; i < _vehicles.Length ; i++)
+        Vehicle? match = _vehicles.Find(v => v.RegistrationNumber == registrationNumber);
+        if (match is null)
         {
-            if (_vehicles[i] is null)
-            {
-                continue;
-            }
-            else if (_vehicles[i].RegistrationNumber == registrationNumber)
-            {
-                result = _vehicles[i].MakeNoise();
-                return true;
-            }
+            result = "Can't find a vehicle with matching registration number.";
+            return false;
         }
-        result = "Can't find a vehicle with matching registration number.";
-        return false;
+
+        result = match.MakeNoise();
+        return true;
     }
 
     public Vehicle? GetVehicle(RegistrationNumber registrationNumber)
     {
-        foreach (var vehicle in _vehicles)
-        {
-            if (vehicle?.RegistrationNumber == registrationNumber)
-            {
-                return vehicle;
-            }
-        }
-        return null;
+        return _vehicles.Find(v => v.RegistrationNumber == registrationNumber);
     }
 
-    public Vehicle[] GetVehicles()
+    public IEnumerable<Vehicle> GetVehicles()
     {
         return _vehicles
             .Where(e => e is not null)
-            .Select(e => e!)
-            .ToArray();
+            .Select(e => e!);
     }
 
     public Dictionary<string, int> GetTypeCounts()
@@ -163,5 +149,13 @@ public class Garage(int capacity)
         return matchingVehicles;
     }
 
-    
+    public IEnumerator<Vehicle> GetEnumerator()
+    {
+        return _vehicles.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }

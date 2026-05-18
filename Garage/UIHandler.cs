@@ -22,7 +22,7 @@ public class UIHandler
         _client.Run();
     }
 
-    private Menu CreateMainMenu()
+    private OptionsMenu CreateMainMenu()
     {
         var menu = new OptionsMenu("Welcome to the main menu.", "Your option: ");
 
@@ -162,9 +162,8 @@ public class UIHandler
     private bool GetVehicleArray(out string result)
     {
         var builder = new StringBuilder();
-        Vehicle[] vehicles = _garage.GetVehicles();
 
-        foreach (var vehicle in vehicles)
+        foreach (var vehicle in _garage.GetVehicles())
         {
             builder.AppendLine(vehicle.ToString());
         }
@@ -189,10 +188,8 @@ public class UIHandler
 
     private bool SearchVehicles(string[] input, out string result)
     {
-        Vehicle?[] vehicles = _garage.SearchVehicles(input);
-
         var builder = new StringBuilder();
-        foreach (var vehicle in vehicles)
+        foreach (var vehicle in _garage.SearchVehicles(input))
         {
             if (vehicle is null)
             {
