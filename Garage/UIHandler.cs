@@ -191,10 +191,6 @@ public class UIHandler
         var builder = new StringBuilder();
         foreach (var vehicle in _garage.SearchVehicles(input))
         {
-            if (vehicle is null)
-            {
-                continue;
-            }
             builder.AppendLine(vehicle.ToString());
         }
 

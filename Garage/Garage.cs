@@ -84,14 +84,13 @@ public class Garage(int capacity) : IEnumerable<Vehicle>
         return vehicleCounts;
     }
 
-    public Vehicle?[] SearchVehicles(string[] input)
+    public IEnumerable<Vehicle> SearchVehicles(string[] input)
     {
         VehicleColor? searchColor = null;
         Type? searchVehicleType = null;
         int? searchWheelAmount = null;
-        Vehicle?[] matchingVehicles = new Vehicle[capacity];
 
-        // interpret search terms
+        // Interpret search terms.
         foreach (string str in input)
         {
             if (searchColor is null && Vehicle.TryParseColor(str, out VehicleColor color))
@@ -113,40 +112,25 @@ public class Garage(int capacity) : IEnumerable<Vehicle>
             }
         }
 
-        // perform search
-        int foundCounter = 0;
-        foreach (var vehicle in _vehicles)
+        // Perform search.
+        var filtered = _vehicles.AsEnumerable();
+
+        if (searchColor is not null)
         {
-            if (vehicle is null)
-            {
-                // spot is empty
-                continue;
-            }
-
-            if (searchVehicleType != null && vehicle.GetType() != searchVehicleType)
-            {
-                // wrong type, not wanted
-                continue;
-            }
-
-            if (searchColor != null && vehicle.Color != searchColor)
-            {
-                // wrong color, not wanted
-                continue;
-            }
-
-            if (searchWheelAmount != null && vehicle.NumberOfWheels != searchWheelAmount)
-            {
-                // wrong number of wheels, not wanted
-                continue;
-            }
-
-            // Anything here is wanted
-            matchingVehicles[foundCounter] = vehicle;
-            foundCounter++;
+            filtered = filtered.Where(v => v.Color == searchColor);
         }
 
-        return matchingVehicles;
+        if (searchVehicleType is not null)
+        {
+            filtered = filtered.Where(v => v.GetType() == searchVehicleType);
+        }
+
+        if (searchWheelAmount is not null)
+        {
+            filtered = filtered.Where(v => v.NumberOfWheels == searchWheelAmount);
+        }
+
+        return filtered;
     }
 
     public IEnumerator<Vehicle> GetEnumerator()
