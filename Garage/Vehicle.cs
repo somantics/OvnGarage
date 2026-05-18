@@ -19,33 +19,37 @@ public enum VehicleColor
 
 public abstract record Vehicle(RegistrationNumber RegistrationNumber, VehicleColor Color,int NumberOfWheels)
 {
-    public static bool TryParse(string[] inputs, out Vehicle result)
+    public static bool TryParse(string[] inputs, out Vehicle result, out string issue)
     {
         result = new NullVehicle();
         // check Length
         if (inputs.Length < 3)
         {
+            issue = "Too few arugments.";
             return false;
         }
 
         // attempt to make registration number
         if (!RegistrationNumber.TryParse(inputs[0], out RegistrationNumber number))
         {
+            issue = $"Could not parse registration number from {inputs[0]}";
             return false;
         }
 
         // attempt to make Color
         if (!TryParseColor(inputs[1], out VehicleColor color))
         {
+            issue = $"Could not parse color from {inputs[1]}";
             return false;
         }
 
         // attempt to check type
         if (!TryParseType(inputs[2], out Type vehicleType))
         {
+            issue = $"Could not parse vehicle type from {inputs[2]}";
             return false;
         }
-
+        issue = "";
         result = (Vehicle)Activator.CreateInstance(vehicleType, [number, color]); // risky business here
 
         return true;

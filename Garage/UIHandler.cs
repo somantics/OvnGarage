@@ -120,9 +120,9 @@ public class UIHandler
         string[] input = rawInput.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         // is the input actually a vehicle
-        if (!Vehicle.TryParse(input, out Vehicle vehicle))
+        if (!Vehicle.TryParse(input, out Vehicle vehicle, out string issue))
         {
-            result = "Cannot interpret a vehicle from the input.";
+            result = issue;
             return false;
         }
 
@@ -135,7 +135,7 @@ public class UIHandler
         }
 
 
-        result = $"Added vehicle {vehicle.RegistrationNumber} to the garage.";
+        result = $"Added {vehicle.GetType().Name} {vehicle.RegistrationNumber} to the garage.";
         return true;
     }
 
@@ -163,7 +163,7 @@ public class UIHandler
     {
         var builder = new StringBuilder();
 
-        foreach (var vehicle in _garage.GetVehicles())
+        foreach (var vehicle in _garage)
         {
             builder.AppendLine(vehicle.ToString());
         }
