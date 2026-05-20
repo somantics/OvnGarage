@@ -12,7 +12,7 @@ public class GarageTest
     [Fact]
     public void AddSuccedsWhenThereIsSpace()
     {
-        var garage = new Garage(3);
+        var garage = new Garage<Vehicle>(3);
         var vehicles = MakeThreeVehicles();
 
         foreach (var item in vehicles)
@@ -27,7 +27,7 @@ public class GarageTest
     [Fact]
     public void AddFailsQuietlyWithoutSpace()
     {
-        var garage = new Garage(2);
+        var garage = new Garage<Vehicle>(2);
         var vehicles = MakeThreeVehicles();
 
         foreach (var item in vehicles)
@@ -42,7 +42,7 @@ public class GarageTest
     [Fact]
     public void TryAddSuccedsWhenThereIsSpace()
     {
-        var garage = new Garage(3);
+        var garage = new Garage<Vehicle>(3);
         var vehicles = MakeThreeVehicles();
 
         garage.TryAdd(vehicles[0]);
@@ -59,7 +59,7 @@ public class GarageTest
     public void TryAddFailsWhenOutOfSpace()
     {
         //arrange
-        var garage = new Garage(2);
+        var garage = new Garage<Vehicle>(2);
         var vehicles = MakeThreeVehicles();
 
         //act
@@ -77,7 +77,7 @@ public class GarageTest
     [Fact]
     public void TryRemoveCorrectlyRemovesAMatch()
     {
-        Garage garage = MakeGarageWithThreeVehicles();
+        Garage<Vehicle> garage = MakeGarageWithThreeVehicles();
 
         garage.TryRemove(new RegistrationNumber(RegNr2));
         var vehicles = garage.GetVehicles();
@@ -94,7 +94,7 @@ public class GarageTest
     [Fact]
     public void TryRemoveFailsWithoutMatch()
     {
-        Garage garage = MakeGarageWithThreeVehicles();
+        Garage<Vehicle> garage = MakeGarageWithThreeVehicles();
         
         bool success = garage.TryRemove(new RegistrationNumber(NewRegNr));
 
@@ -109,9 +109,9 @@ public class GarageTest
         Assert.Contains(new RegistrationNumber(RegNr3), registrationNumbers);
     }
 
-    private static Garage MakeGarageWithThreeVehicles()
+    private static Garage<Vehicle> MakeGarageWithThreeVehicles()
     {
-        var garage = new Garage(3);
+        var garage = new Garage<Vehicle>(3);
         foreach (var item in MakeThreeVehicles())
         {
             garage.Add(item);

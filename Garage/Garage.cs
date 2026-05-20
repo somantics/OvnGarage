@@ -3,46 +3,52 @@ using System.Collections;
 
 namespace Garage;
 
-public class Garage(int capacity) : IEnumerable<Vehicle>
+public class Garage<T>(int capacity) : IEnumerable<T>
+    where T: IRegisterable, IHonkable, ISearchable
 {
-    private readonly int capacity = capacity;
-    readonly List<Vehicle> _vehicles = [];
+    readonly T?[] _vehicles = new T?[capacity];
 
-    public void Add(Vehicle vehicle)
+    public void Add(T item)
     {
-        TryAdd(vehicle);
+        TryAdd(item);
     }
 
-    public bool TryAdd(Vehicle vehicle)
+
+    public bool TryAdd(T item)
     {
-        if (capacity <= _vehicles.Count)
+        for (int i = 0; i < _vehicles.Length ; i++)
         {
-            return false;
+            if (_vehicles[i] is null)
+            {
+                _vehicles[i] = item;
+                return true;
+            }
         }
-        _vehicles.Add(vehicle);
-        return true;
+        return false;
     }
 
-    public bool TryRemove(Vehicle vehicle)
+    public bool TryRemove(T item)
     {
-        return TryRemove(vehicle.RegistrationNumber);
+        return TryRemove(item.GetRegistrationNumber());
     }
 
     public bool TryRemove(RegistrationNumber registrationNumber)
     {
-        Vehicle? match = _vehicles.Find(v => v.RegistrationNumber == registrationNumber);
-        if (match is null)
-        {
-            return false;
-        }
 
-        _vehicles.Remove(match);
-        return true;
+        for (int i = 0; i < _vehicles.Length ; i++)
+        {
+            if (_vehicles[i]?.GetRegistrationNumber() == registrationNumber)
+            {
+                _vehicles[i] = default;
+                return true;
+            }
+        }
+        return false;
     }
 
     public bool TryHonk(RegistrationNumber registrationNumber, out string result)
     {
-        Vehicle? match = _vehicles.Find(v => v.RegistrationNumber == registrationNumber);
+        T? match = GetVehicles().Find(v => v.GetRegistrationNumber() == registrationNumber);
         if (match is null)
         {
             result = "Can't find a vehicle with matching registration number.";
@@ -53,14 +59,17 @@ public class Garage(int capacity) : IEnumerable<Vehicle>
         return true;
     }
 
-    public Vehicle? GetVehicle(RegistrationNumber registrationNumber)
+    public T? GetVehicle(RegistrationNumber registrationNumber)
     {
-        return _vehicles.Find(v => v.RegistrationNumber == registrationNumber);
+        return GetVehicles().Find(v => v.GetRegistrationNumber() == registrationNumber);
     }
 
-    public IEnumerable<Vehicle> GetVehicles()
+    public List<T> GetVehicles()
     {
-        return _vehicles;
+        return _vehicles
+            .Where(e => e is not null)
+            .Select(e => e!)
+            .ToList();
     }
 
     public Dictionary<string, int> GetTypeCounts()
@@ -82,7 +91,7 @@ public class Garage(int capacity) : IEnumerable<Vehicle>
         return vehicleCounts;
     }
 
-    public IEnumerable<Vehicle> SearchVehicles(string[] input)
+    public IEnumerable<T> SearchVehicles(string[] input)
     {
         VehicleColor? searchColor = null;
         Type? searchVehicleType = null;
@@ -111,11 +120,11 @@ public class Garage(int capacity) : IEnumerable<Vehicle>
         }
 
         // Perform search.
-        var filtered = GetVehicles();
+        IEnumerable<T> filtered = GetVehicles();
 
         if (searchColor is not null)
         {
-            filtered = filtered.Where(v => v.Color == searchColor);
+            filtered = filtered.Where(v => v.GetColor() == searchColor);
         }
 
         if (searchVehicleType is not null)
@@ -125,15 +134,19 @@ public class Garage(int capacity) : IEnumerable<Vehicle>
 
         if (searchWheelAmount is not null)
         {
-            filtered = filtered.Where(v => v.NumberOfWheels == searchWheelAmount);
+            filtered = filtered.Where(v => v.GetWheelCount() == searchWheelAmount);
         }
 
         return filtered;
     }
 
-    public IEnumerator<Vehicle> GetEnumerator()
+    public IEnumerator<T> GetEnumerator()
     {
-        return _vehicles.GetEnumerator();
+        foreach (var item in _vehicles)
+        {
+            if (item is null) continue;
+            yield return item;
+        }
     }
 
     IEnumerator IEnumerable.GetEnumerator()

@@ -17,7 +17,7 @@ public enum VehicleColor
     none,
 }
 
-public abstract record Vehicle(RegistrationNumber RegistrationNumber, VehicleColor Color,int NumberOfWheels)
+public abstract record Vehicle(RegistrationNumber RegistrationNumber, VehicleColor Color,int NumberOfWheels) : IRegisterable, IHonkable, ISearchable
 {
     public static bool TryParse(string[] inputs, out Vehicle result, out string issue)
     {
@@ -98,6 +98,21 @@ public abstract record Vehicle(RegistrationNumber RegistrationNumber, VehicleCol
             return false;
         }
         return true;
+    }
+
+    public RegistrationNumber GetRegistrationNumber()
+    {
+        return RegistrationNumber;
+    }
+
+    public VehicleColor GetColor()
+    {
+        return Color;
+    }
+
+    public int GetWheelCount()
+    {
+        return NumberOfWheels;
     }
 
     public virtual string MakeNoise()

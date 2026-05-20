@@ -8,10 +8,10 @@ namespace Garage.UI;
 
 public class UIHandler
 {
-    private Garage _garage;
+    private Garage<Vehicle> _garage;
     private CLIClient _client;
 
-    public UIHandler(Garage garage)
+    public UIHandler(Garage<Vehicle> garage)
     {
         _garage = garage;
         _client = new CLIClient(CreateMainMenu());
@@ -59,7 +59,7 @@ public class UIHandler
     private bool NewGarage(string[] input, out string result)
     {
         var builder = new StringBuilder();
-        _garage = new Garage(input.Length);
+        _garage = new Garage<Vehicle>(input.Length);
 
         foreach (var entry in input)
         {
