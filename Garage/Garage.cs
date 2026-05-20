@@ -60,9 +60,7 @@ public class Garage(int capacity) : IEnumerable<Vehicle>
 
     public IEnumerable<Vehicle> GetVehicles()
     {
-        return _vehicles
-            .Where(e => e is not null)
-            .Select(e => e!);
+        return _vehicles;
     }
 
     public Dictionary<string, int> GetTypeCounts()
@@ -113,7 +111,7 @@ public class Garage(int capacity) : IEnumerable<Vehicle>
         }
 
         // Perform search.
-        var filtered = _vehicles.AsEnumerable();
+        var filtered = GetVehicles();
 
         if (searchColor is not null)
         {
